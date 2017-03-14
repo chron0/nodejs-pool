@@ -1,0 +1,51 @@
+{
+  "solo": true,
+  "coin": "xmr",
+  "ports": [
+    {
+      "port": 2893,
+      "difficulty": 20000,
+      "desc": "Solo mining port",
+      "portType": "solo",
+      "hidden": false,
+      "ssl": false
+    }
+  ],
+  "pool" : {
+    "minerTimeout": 600,
+    "address": "46XWBqE1iwsVxSDP1qDrxhE1XvsZV6eALG5LwnoMdjbT4GPdy2bZTb99kagzxp2MMjUamTYZ4WgvZdFadvMimTjvR6Gv8hL",
+    "targetTime": 30,
+    "minDifficulty": 1000,
+    "maxDifficulty": 300000,
+    "maxDiffChange": 10,
+    "banThreshold": 100,
+    "banPercent": 100,
+    "trustedMiners": true,
+    "trustMin": 1,
+    "trustPenalty": 2,
+    "trustThreshold": 2,
+    "retargetTime": 60,
+    "varDiffVariance": 20
+  },
+  "rpc": {
+    "https": false
+  },
+  "general": {
+    "mailgunURL": null,
+    "mailgunKey": null,
+    "emailFrom": null,
+    "adminEmail": null
+  },
+  "payout": {
+    "rpcPasswordEnabled": false,
+    "rpcPasswordPath": null
+  },
+  "wallet": {
+    "address": "127.0.0.1",
+    "port": 22222
+  },
+  "daemon": {
+    "address": "127.0.0.1",
+    "port": 18081
+  }
+}

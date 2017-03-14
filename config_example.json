@@ -4,6 +4,8 @@
   "hostname": "testpool.com",
   "db_storage_path": "CHANGEME",
   "coin": "xmr",
+  "config_key": "091fh980ehw08y231dwsjha",
+  "configHost": "https://api_sever_url/getConfig",
   "mysql": {
     "connectionLimit": 20,
     "host": "127.0.0.1",

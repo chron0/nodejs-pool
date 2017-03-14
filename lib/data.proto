@@ -9,6 +9,9 @@ enum MESSAGETYPE {
     SHARE = 0;
     BLOCK = 1;
     INVALIDSHARE = 2;
+    POOLREG = 3;
+    POOLPORTS = 4;
+    REGISTERUSER = 5;
 }
 
 message WSData {
@@ -22,6 +25,29 @@ message InvalidShare{
     required string paymentAddress = 1;
     optional string paymentID = 2;
     required string identifier = 3;
+}
+
+message RegisterUser {
+    required string address = 1;
+    required string password = 2;
+}
+
+message PoolReg {
+    required int32 poolID = 1;
+    required string poolIP = 2;
+    required string hostname = 3;
+    repeated Port list = 4;
+    required int32 blockID = 5;
+}
+
+message Port {
+    required int32 port = 1;
+    required int32 startingDiff = 2;
+    required string type = 3;
+    required string desc = 4;
+    required bool hidden = 5;
+    required bool ssl = 6;
+    required int32 miners = 7;
 }
 
 message Share {
