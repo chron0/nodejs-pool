@@ -1,5 +1,6 @@
 "use strict";
 let lmdb = require('node-lmdb');
+let now = require("performance-now");
 let env = new lmdb.Env();
 let argv = require('minimist')(process.argv.slice(2));
 env.open({
@@ -35,14 +36,16 @@ let cacheDB = env.openDbi({
 let getCache = function(cacheKey){
     try {
         let txn = env.beginTxn({readOnly: true});
-        console.time('load_cache_data');
+        let lmdb_load_start = now();
         let cached = txn.getString(this.cacheDB, cacheKey);
-        console.timeEnd('load_cache_data');
+        let lmdb_load_end = now();
         txn.abort();
         if (cached !== null){
-            console.time('cache_parse');
+            let json_parse_start = now();
             let parse_data = JSON.parse(cached);
-            console.timeEnd('cache_parse');
+            let json_parse_end = now();
+            console.log('Spent ' + (lmdb_load_start-lmdb_load_end).toFixed(3) + 'ms loading data from LMDB');
+            console.log('Spent ' + (json_parse_start-json_parse_end).toFixed(3) + 'ms parsing the LMDB data');
             return parse_data;
         }
     } catch (e) {
@@ -51,18 +54,6 @@ let getCache = function(cacheKey){
     return false;
 };
 
-let cached_data = {};
-console.time('full_cache_load');
-let txn = env.beginTxn({readOnly: true});
-console.time('lmdb_data_grab');
-let cached = txn.getString(cacheDB, 'minerList');
-console.timeEnd('lmdb_data_grab');
-txn.abort();
-if (cached !== null){
-    console.time('cache_parse');
-    cached_data = JSON.parse(cached);
-    console.timeEnd('cache_parse');
-}
-console.timeEnd('full_cache_load');
+let cached_data = getCache('minerList');
 
 console.log(Object.keys(cached_data).length + ' known miners in the database');
