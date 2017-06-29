@@ -37,7 +37,7 @@ let getCache = function(cacheKey){
     try {
         let txn = env.beginTxn({readOnly: true});
         let lmdb_load_start = now();
-        let cached = txn.getString(this.cacheDB, cacheKey);
+        let cached = txn.getString(cacheDB, cacheKey);
         let lmdb_load_end = now();
         txn.abort();
         if (cached !== null){
