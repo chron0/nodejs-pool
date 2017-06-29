@@ -5,7 +5,7 @@ let argv = require('minimist')(process.argv.slice(2));
 env.open({
         path: argv.db_path,
         maxDbs: 10,
-        mapSize: 24 * 1024 * 1024 * 1024,
+        mapSize: 1024 * 1024 * 1024,
         noSync: false,
         mapAsync: true,
         useWritemap: false,
