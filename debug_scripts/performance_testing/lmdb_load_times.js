@@ -44,8 +44,8 @@ let getCache = function(cacheKey){
             let json_parse_start = now();
             let parse_data = JSON.parse(cached);
             let json_parse_end = now();
-            console.log('Spent ' + (lmdb_load_start-lmdb_load_end).toFixed(3) + 'ms loading data from LMDB');
-            console.log('Spent ' + (json_parse_start-json_parse_end).toFixed(3) + 'ms parsing the LMDB data');
+            console.log('Spent ' + (lmdb_load_end-lmdb_load_start).toFixed(3) + 'ms loading data from LMDB');
+            console.log('Spent ' + (json_parse_end-json_parse_start).toFixed(3) + 'ms parsing the LMDB data');
             return parse_data;
         }
     } catch (e) {
