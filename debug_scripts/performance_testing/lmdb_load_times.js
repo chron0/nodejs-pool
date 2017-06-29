@@ -51,6 +51,18 @@ let getCache = function(cacheKey){
     return false;
 };
 
-console.time('load_miner_list');
-getCache('minerList');
-console.timeEnd('load_miner_list');
+let cached_data = {};
+console.time('full_cache_load');
+let txn = env.beginTxn({readOnly: true});
+console.time('lmdb_data_grab');
+let cached = txn.getString(cacheDB, 'minerList');
+console.timeEnd('lmdb_data_grab');
+txn.abort();
+if (cached !== null){
+    console.time('cache_parse');
+    cached_data = JSON.parse(cached);
+    console.timeEnd('cache_parse');
+}
+console.timeEnd('full_cache_load');
+
+console.log(Object.keys(cached_data).length + ' known miners in the database');
