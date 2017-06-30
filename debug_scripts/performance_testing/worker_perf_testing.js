@@ -116,11 +116,10 @@ globalMinerList.forEach(function (miner) {
 let end = now();
 console.log('Spent ' + (end-start).toFixed(3) + 'ms on this - parsed: ' + intCounter);
 console.log('Performing removal state with all miners in the list - indexOf');
-minerList = Object.keys(globalMinerList);
 intCounter = 0;
 start = now();
 globalMinerList.forEach(function (miner) {
-    if (minerList.indexOf(miner) === -1) {
+    if (globalMinerList.indexOf(miner) === -1) {
         intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
