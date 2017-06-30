@@ -83,14 +83,14 @@ let globalMinerList = getCache('minerList');
         }
         if (cycleCount === 0) {
             cachedData.hashHistory.unshift({ts: currentTime, hs: cachedData.hash});
-            if (cachedData.hashHistory.length > global.config.general.statsBufferLength) {
-                while (cachedData.hashHistory.length > global.config.general.statsBufferLength) {
+            if (cachedData.hashHistory.length > 120) {
+                while (cachedData.hashHistory.length > 120) {
                     cachedData.hashHistory.pop();
                 }
             }
             cachedData.minerHistory.unshift({ts: currentTime, cn: cachedData.minerCount});
-            if (cachedData.minerHistory.length > global.config.general.statsBufferLength) {
-                while (cachedData.minerHistory.length > global.config.general.statsBufferLength) {
+            if (cachedData.minerHistory.length > 120) {
+                while (cachedData.minerHistory.length > 120) {
                     cachedData.minerHistory.pop();
                 }
             }
