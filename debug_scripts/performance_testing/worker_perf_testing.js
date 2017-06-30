@@ -132,12 +132,16 @@ globalMinerList.forEach(function (miner) {
 end = now();
 console.log('Spent ' + (end-start).toFixed(3) + 'ms on this - parsed: ' + intCounter);
 
+let globalMinerObject = {};
+globalMinerList.forEach(function(miner){
+    globalMinerObject[miner] = true;
+});
 minerList = {};
 console.log('Performing removal state with no miners in the list - in');
 intCounter = 0;
 start = now();
 globalMinerList.forEach(function (miner) {
-    if (miner in minerList) {
+    if (!(miner in minerList)) {
         intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
@@ -152,7 +156,7 @@ console.log('Performing removal state with all miners in the list - in');
 intCounter = 0;
 start = now();
 globalMinerList.forEach(function (miner) {
-    if (miner in globalMinerList) {
+    if (!(miner in globalMinerObject)) {
         intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
