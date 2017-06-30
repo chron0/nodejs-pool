@@ -37,17 +37,10 @@ let cacheDB = env.openDbi({
 let getCache = function(cacheKey){
     try {
         let txn = env.beginTxn({readOnly: true});
-        let lmdb_load_start = now();
         let cached = txn.getString(cacheDB, cacheKey);
-        let lmdb_load_end = now();
         txn.abort();
         if (cached !== null){
-            let json_parse_start = now();
-            let parse_data = JSON.parse(cached);
-            let json_parse_end = now();
-            console.log('Spent ' + (lmdb_load_end-lmdb_load_start).toFixed(3) + 'ms loading data from LMDB');
-            console.log('Spent ' + (json_parse_end-json_parse_start).toFixed(3) + 'ms parsing the LMDB data');
-            return parse_data;
+            return JSON.parse(cached);
         }
     } catch (e) {
         return false;
@@ -64,10 +57,8 @@ let localTimes = {
     global: locTime, miners: {}
 };
 let minerList = [];
-let identifiers = {};
 let currentTime = Date.now();
 let cycleCount = 0;
-let activeAddresses = [];
 let globalMinerList = getCache('minerList');
 // pplns: 0, pps: 0, solo: 0, prop: 0, global: 0
 ['pplns', 'pps', 'solo', 'prop', 'global'].forEach(function (key) {
@@ -110,9 +101,11 @@ let globalMinerList = getCache('minerList');
     console.log('Spent ' + (parsing_pool_stats_end-parsing_pool_stats_start).toFixed(3) + 'ms parsing the ' + key + ' data');
 });
 console.log('Performing removal state with no miners in the list - indexOf');
+let intCounter = 0;
 let start = now();
 globalMinerList.forEach(function (miner) {
     if (minerList.indexOf(miner) === -1) {
+        intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
             minerStats.hash = 0;
@@ -121,12 +114,14 @@ globalMinerList.forEach(function (miner) {
     }
 });
 let end = now();
-console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+console.log('Spent ' + (end-start).toFixed(3) + 'ms on this - parsed: ' + intCounter);
 console.log('Performing removal state with all miners in the list - indexOf');
 minerList = Object.keys(globalMinerList);
+intCounter = 0;
 start = now();
 globalMinerList.forEach(function (miner) {
     if (minerList.indexOf(miner) === -1) {
+        intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
             minerStats.hash = 0;
@@ -135,13 +130,15 @@ globalMinerList.forEach(function (miner) {
     }
 });
 end = now();
-console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+console.log('Spent ' + (end-start).toFixed(3) + 'ms on this - parsed: ' + intCounter);
 
 minerList = {};
 console.log('Performing removal state with no miners in the list - in');
+intCounter = 0;
 start = now();
 globalMinerList.forEach(function (miner) {
     if (miner in minerList) {
+        intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
             minerStats.hash = 0;
@@ -150,12 +147,13 @@ globalMinerList.forEach(function (miner) {
     }
 });
 end = now();
-console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+console.log('Spent ' + (end-start).toFixed(3) + 'ms on this - parsed: ' + intCounter);
 console.log('Performing removal state with all miners in the list - in');
-minerList = globalMinerList;
+intCounter = 0;
 start = now();
 globalMinerList.forEach(function (miner) {
-    if (miner in minerList) {
+    if (miner in globalMinerList) {
+        intCounter += 1;
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
             minerStats.hash = 0;
@@ -164,4 +162,4 @@ globalMinerList.forEach(function (miner) {
     }
 });
 end = now();
-console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+console.log('Spent ' + (end-start).toFixed(3) + 'ms on this - parsed: ' + intCounter);
