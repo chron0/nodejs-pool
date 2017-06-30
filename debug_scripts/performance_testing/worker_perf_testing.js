@@ -109,34 +109,59 @@ let globalMinerList = getCache('minerList');
     let parsing_pool_stats_end = now();
     console.log('Spent ' + (parsing_pool_stats_end-parsing_pool_stats_start).toFixed(3) + 'ms parsing the ' + key + ' data');
 });
-console.log('Performing removal state with no miners in the list');
-let all_miner_removal_start = now();
+console.log('Performing removal state with no miners in the list - indexOf');
+let start = now();
 globalMinerList.forEach(function (miner) {
-    let removing_inactive_miners_start = now();
     if (minerList.indexOf(miner) === -1) {
-        console.log('Spent ' + (removing_inactive_miners_start-now()).toFixed(3) + 'ms looking for the miner in the minerList');
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
             minerStats.hash = 0;
             cache_updates[miner] = minerStats;
         }
     }
-    console.log('Spent ' + (removing_inactive_miners_start-now()).toFixed(3) + 'ms processing miner for removal');
 });
-let all_miner_removal_end = now();
-console.log('Performing removal state with all miners in the list');
+let end = now();
+console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+console.log('Performing removal state with all miners in the list - indexOf');
 minerList = Object.keys(globalMinerList);
-let no_miner_removal_start = now();
+start = now();
 globalMinerList.forEach(function (miner) {
-    let removing_inactive_miners_start = now();
     if (minerList.indexOf(miner) === -1) {
-        console.log('Spent ' + (removing_inactive_miners_start-now()).toFixed(3) + 'ms looking for the miner in the minerList');
         let minerStats = getCache(miner);
         if (minerStats.hash !== 0) {
             minerStats.hash = 0;
             cache_updates[miner] = minerStats;
         }
     }
-    console.log('Spent ' + (removing_inactive_miners_start-now()).toFixed(3) + 'ms processing miner for removal');
 });
-let no_miner_removal_end = now();
+end = now();
+console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+
+minerList = {};
+console.log('Performing removal state with no miners in the list - in');
+start = now();
+globalMinerList.forEach(function (miner) {
+    if (miner in minerList) {
+        let minerStats = getCache(miner);
+        if (minerStats.hash !== 0) {
+            minerStats.hash = 0;
+            cache_updates[miner] = minerStats;
+        }
+    }
+});
+end = now();
+console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
+console.log('Performing removal state with all miners in the list - in');
+minerList = globalMinerList;
+start = now();
+globalMinerList.forEach(function (miner) {
+    if (miner in minerList) {
+        let minerStats = getCache(miner);
+        if (minerStats.hash !== 0) {
+            minerStats.hash = 0;
+            cache_updates[miner] = minerStats;
+        }
+    }
+});
+end = now();
+console.log('Spent ' + (start-end).toFixed(3) + 'ms on this');
