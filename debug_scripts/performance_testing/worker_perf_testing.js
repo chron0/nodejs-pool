@@ -110,6 +110,7 @@ let globalMinerList = getCache('minerList');
     console.log('Spent ' + (parsing_pool_stats_end-parsing_pool_stats_start).toFixed(3) + 'ms parsing the ' + key + ' data');
 });
 console.log('Performing removal state with no miners in the list');
+let all_miner_removal_start = now();
 globalMinerList.forEach(function (miner) {
     let removing_inactive_miners_start = now();
     if (minerList.indexOf(miner) === -1) {
@@ -122,8 +123,10 @@ globalMinerList.forEach(function (miner) {
     }
     console.log('Spent ' + (removing_inactive_miners_start-now()).toFixed(3) + 'ms processing miner for removal');
 });
+let all_miner_removal_end = now();
 console.log('Performing removal state with all miners in the list');
 minerList = Object.keys(globalMinerList);
+let no_miner_removal_start = now();
 globalMinerList.forEach(function (miner) {
     let removing_inactive_miners_start = now();
     if (minerList.indexOf(miner) === -1) {
@@ -136,3 +139,4 @@ globalMinerList.forEach(function (miner) {
     }
     console.log('Spent ' + (removing_inactive_miners_start-now()).toFixed(3) + 'ms processing miner for removal');
 });
+let no_miner_removal_end = now();
