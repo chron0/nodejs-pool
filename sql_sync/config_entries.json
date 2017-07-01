@@ -558,5 +558,13 @@
     "item_value": "0",
     "item_type": "int",
     "Item_desc": "Payout priority setting. 0 = use default (4x fee); 1 = low prio (1x fee)"
+  },
+  {
+    "id": 76,
+    "module": "pool",
+    "item": "extraNonce",
+    "item_value": "true",
+    "item_type": "bool",
+    "Item_desc": "Does this pool/coin support the extraNonce system."
   }
 ]
